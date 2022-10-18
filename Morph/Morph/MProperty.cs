@@ -7,9 +7,9 @@ namespace Morph
     public class MProperty
     {
         public string Name { get; set; }
-        public string Value { get; set; }
+        public object Value { get; set; }
 
-        public MProperty(string name = "", string value = "")
+        public MProperty(string name = "", object value = null)
         {
             Name = name;
             Value = value;
@@ -17,7 +17,7 @@ namespace Morph
 
         public override string ToString()
         {
-            return string.Format("{0}: {1}", Name.Trim(), Value.Trim());
+            return string.Format("{0}: {1}", Name.Trim(), Value.ToString().Trim());
         }
     }
 }

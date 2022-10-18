@@ -37,7 +37,544 @@ namespace Morph
             return (n >= 48 && n < 58) || (n >= 65 && n < 71) || (n >= 97 && n < 103);
         }
 
+        public MDocument ImportDocument(string inputText)
+        {
+            var marker = new Marker();
 
+            var styleRules = new List<MStyleRule>();
+
+            while (true)
+            {
+                var styleRule = GetStyleRule(inputText, marker);
+
+                if (styleRule != null)
+                {
+                    styleRules.Add(styleRule);
+                }
+                else
+                {
+                    break;
+                }
+            }
+
+            var d = new MDocument();
+
+            d.StyleRules = styleRules;
+
+            return d;
+        }
+
+        public MStyleRule GetStyleRule(string inputText, Marker marker)
+        {
+            var m = marker.Copy();
+
+            var selectors = GetSelectors(inputText, m);
+            var properties = GetProperties(inputText, m);
+
+            if (selectors == null || properties == null)
+            {
+                return null;
+            }
+
+            var styleRule = new MStyleRule();
+
+            styleRule.Selectors = selectors;
+            styleRule.Properties = properties;
+
+            marker.P = m.P;
+
+            return styleRule;
+        }
+
+        public List<IMSelector> GetSelectors(string inputText, Marker marker)
+        {
+            var m = marker.Copy();
+
+            GetWhiteSpace(inputText, m);
+
+            var selectors = new List<IMSelector>();
+
+            while (true)
+            {
+                var idSelector = GetIdSelector(inputText, m);
+
+                if (idSelector != null)
+                {
+                    selectors.Add(idSelector);
+                    continue;
+                }
+
+                var classSelector = GetClassSelector(inputText, m);
+
+                if (classSelector != null)
+                {
+                    selectors.Add(classSelector);
+                    continue;
+                }
+
+                var elementNameSelector = GetElementNameSelector(inputText, m);
+
+                if (elementNameSelector != null)
+                {
+                    selectors.Add(elementNameSelector);
+                    continue;
+                }
+
+                break;
+            }
+
+            marker.P = m.P;
+
+            return selectors;
+        }
+
+        public MIdSelector GetIdSelector(string inputText, Marker marker)
+        {
+            var m = marker.Copy();
+
+            var c = inputText.Substring(m.P, 1)[0];
+
+            if (c != '#')
+            {
+                return null;
+            }
+
+            m.P++;
+
+            var start = m.P;
+
+            while (m.P < inputText.Length)
+            {
+                c = inputText.Substring(m.P, 1)[0];
+
+                if (IsAlphanumeric(c) || c == '-' || c == '_')
+                {
+                    m.P++;
+                }
+                else
+                {
+                    break;
+                }
+            }
+
+            var end = m.P;
+
+            if (end == start)
+            {
+                return null;
+            }
+
+            var t = inputText.Substring(start, end - start);
+
+            return new MIdSelector(t);
+        }
+
+        public MClassSelector GetClassSelector(string inputText, Marker marker)
+        {
+            var m = marker.Copy();
+
+            var c = inputText.Substring(m.P, 1)[0];
+
+            if (c != '.')
+            {
+                return null;
+            }
+
+            m.P++;
+
+            var start = m.P;
+
+            while (m.P < inputText.Length)
+            {
+                c = inputText.Substring(m.P, 1)[0];
+
+                if (IsAlphanumeric(c) || c == '-' || c == '_')
+                {
+                    m.P++;
+                }
+                else
+                {
+                    break;
+                }
+            }
+
+            var end = m.P;
+
+            if (end == start)
+            {
+                return null;
+            }
+
+            var t = inputText.Substring(start, end - start);
+
+            return new MClassSelector(t);
+        }
+
+        public MElementNameSelector GetElementNameSelector(string inputText, Marker marker)
+        {
+            var m = marker.Copy();
+
+            var start = m.P;
+
+            while (m.P < inputText.Length)
+            {
+                var c = inputText.Substring(m.P, 1)[0];
+
+                if (IsAlphanumeric(c) || c == '-' || c == '_')
+                {
+                    m.P++;
+                }
+                else
+                {
+                    break;
+                }
+            }
+
+            var end = m.P;
+
+            if (end == start)
+            {
+                return null;
+            }
+
+            var t = inputText.Substring(start, end - start);
+
+            return new MElementNameSelector(t);
+        }
+
+        public List<MProperty> GetProperties(string inputText, Marker marker)
+        {
+            var m = marker.Copy();
+
+            GetWhiteSpace(inputText, m);
+
+            var c = inputText.Substring(m.P, 1)[0];
+
+            if (c != '{')
+            {
+                return null;
+            }
+
+            m.P++;
+
+            var properties = new List<MProperty>();
+
+            while (true)
+            {
+                var p = GetProperty(inputText, m);
+
+                if (p != null)
+                {
+                    properties.Add(p);
+                }
+                else
+                {
+                    break;
+                }
+            }
+
+            GetWhiteSpace(inputText, m);
+
+            c = inputText.Substring(m.P, 1)[0];
+
+            if (c != '}')
+            {
+                return null;
+            }
+
+            m.P++;
+
+            marker.P = m.P;
+
+            return properties;
+        }
+
+        public MProperty GetProperty(string inputText, Marker marker)
+        {
+            var m = marker.Copy();
+
+            GetWhiteSpace(inputText, m);
+
+            var name = GetPropertyName(inputText, m);
+
+            if (name == null)
+            {
+                return null;
+            }
+
+            GetWhiteSpace(inputText, m);
+
+            var c = inputText.Substring(m.P, 1)[0];
+
+            if (c != ':')
+            {
+                return null;
+            }
+
+            m.P++;
+
+            var value = GetPropertyValue(inputText, m);
+
+            if (value == null)
+            {
+                return null;
+            }
+
+            c = inputText.Substring(m.P, 1)[0];
+
+            if (c != ';')
+            {
+                return null;
+            }
+
+            m.P++;
+
+            marker.P = m.P;
+
+            return new MProperty(name, value);
+        }
+
+        public string GetPropertyName(string inputText, Marker marker)
+        {
+            var start = marker.P;
+
+            while (marker.P < inputText.Length)
+            {
+                var c = inputText.Substring(marker.P, 1)[0];
+
+                if (IsAlphanumeric(c) || c == '-')
+                {
+                    marker.P++;
+                }
+                else
+                {
+                    break;
+                }
+            }
+
+            var end = marker.P;
+
+            if (end == start)
+            {
+                return null;
+            }
+
+            var t = inputText.Substring(start, end - start);
+
+            return t;
+        }
+
+        public object GetPropertyValue(string inputText, Marker marker)
+        {
+            var lengthSet = GetLengthSet(inputText, marker);
+
+            if (lengthSet != null)
+            {
+                return lengthSet;
+            }
+
+            var rgbaColour = GetRGBAColour(inputText, marker);
+
+            if (rgbaColour != null)
+            {
+                return rgbaColour;
+            }
+
+            var hslaColour = GetHSLAColour(inputText, marker);
+
+            if (hslaColour != null)
+            {
+                return hslaColour;
+            }
+
+            var start = marker.P;
+
+            while (marker.P < inputText.Length)
+            {
+                var c = inputText.Substring(marker.P, 1)[0];
+
+                if (";}{".Any(d => d == c))
+                {
+                    break;
+                }
+                else
+                {
+                    marker.P++;
+                }
+            }
+
+            var end = marker.P;
+
+            if (end == start)
+            {
+                return null;
+            }
+
+            var t = inputText.Substring(start, end - start);
+            t = t.Trim();
+
+            return t;
+
+        }
+
+        public MHSLAColour GetHSLAColour(string inputText, Marker marker)
+        {
+            var m = marker.Copy();
+
+            var c = inputText.Substring(m.P, 4);
+
+            if (c == "hsla")
+            {
+                m.P += 4;
+
+                var ns = GetNumberSet(inputText, m);
+
+                if (ns == null)
+                {
+                    return null;
+                }
+
+                if (ns.Count != 4)
+                {
+                    throw new MorphSyntaxError("A HSLA colour must have four values.");
+                }
+
+                var h = ns[0];
+                var s = ns[1];
+                var l = ns[2];
+                var a = ns[3];
+
+                ValidateRGBAColourValue(h);
+                ValidateRGBAColourValue(s);
+                ValidateRGBAColourValue(l);
+                ValidateRGBAColourValue(a);
+
+                return new MHSLAColour((int)h, (int)s, (int)l, (int)a);
+            }
+
+            c = inputText.Substring(m.P, 3);
+
+            if (c == "hsl")
+            {
+                m.P += 3;
+
+                var ns = GetNumberSet(inputText, m);
+
+                if (ns == null)
+                {
+                    return null;
+                }
+
+                if (ns.Count != 3)
+                {
+                    throw new MorphSyntaxError("An RGB colour must have four values.");
+                }
+
+                var h = ns[0];
+                var s = ns[1];
+                var l = ns[2];
+
+                ValidateRGBAColourValue(h);
+                ValidateRGBAColourValue(s);
+                ValidateRGBAColourValue(l);
+
+                return new MHSLColour((int)h, (int)s, (int)l);
+            }
+
+            return null;
+        }
+
+        public MRGBAColour GetRGBAColour(string inputText, Marker marker)
+        {
+            var m = marker.Copy();
+
+            var hn = GetHexadecimalNumber(inputText, m);
+
+            if (hn != null)
+            {
+                if (hn.Length != 6 && hn.Length != 8)
+                {
+                    throw new MorphSyntaxError(string.Format("'#{0}' is not a valid hexadecimal colour code.", hn));
+                }
+
+                var r = Convert.ToInt32(hn.Substring(0, 2), 16);
+                var g = Convert.ToInt32(hn.Substring(2, 2), 16);
+                var b = Convert.ToInt32(hn.Substring(4, 2), 16);
+
+                if (hn.Length == 8)
+                {
+                    var a = Convert.ToInt32(hn.Substring(6, 2), 16);
+
+                    return new MRGBAColour(r, g, b, a);
+                }
+                else
+                {
+                    return new MRGBColour(r, g, b);
+                }
+            }
+
+            var c = inputText.Substring(m.P, 4);
+
+            if (c == "rgba")
+            {
+                m.P += 4;
+
+                var ns = GetNumberSet(inputText, m);
+
+                if (ns == null)
+                {
+                    return null;
+                }
+
+                if (ns.Count != 4)
+                {
+                    throw new MorphSyntaxError("An RGBA colour must have four values.");
+                }
+
+                var r = ns[0];
+                var g = ns[1];
+                var b = ns[2];
+                var a = ns[3];
+
+                ValidateRGBAColourValue(r);
+                ValidateRGBAColourValue(g);
+                ValidateRGBAColourValue(b);
+                ValidateRGBAColourValue(a);
+
+                return new MRGBAColour((int)r, (int)g, (int)b, (int)a);
+            }
+
+            c = inputText.Substring(m.P, 3);
+
+            if (c == "rgb")
+            {
+                m.P += 3;
+
+                var ns = GetNumberSet(inputText, m);
+
+                if (ns == null)
+                {
+                    return null;
+                }
+
+                if (ns.Count != 3)
+                {
+                    throw new MorphSyntaxError("An RGB colour must have four values.");
+                }
+
+                var r = ns[0];
+                var g = ns[1];
+                var b = ns[2];
+
+                ValidateRGBAColourValue(r);
+                ValidateRGBAColourValue(g);
+                ValidateRGBAColourValue(b);
+
+                return new MRGBColour((int)r, (int)g, (int)b);
+            }
+
+            return null;
+        }
 
         public void ValidateRGBAColourValue(object value)
         {
