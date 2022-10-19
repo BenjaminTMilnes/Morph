@@ -116,5 +116,51 @@ namespace Morph.Tests
             Assert.Equal(b, colour.B);
             Assert.Equal(0, colour.A);
         }
+
+        [Theory]
+        [InlineData("rgba(0, 0, 0, 0%)", 0, 0, 0, 0)]
+        [InlineData("rgba(100, 0, 0, 0%)", 100, 0, 0, 0)]
+        [InlineData("rgba(100, 120, 200, 0%)", 100, 120, 200, 0)]
+        [InlineData("rgba(100, 120, 200, 50%)", 100, 120, 200, 127)]
+        [InlineData("rgba(225, 225, 225, 100%)", 225, 225, 225, 255)]
+        public void ImportRGBAColourTest3(string t, int r, int g, int b, int a)
+        {
+            var colour = Importer.GetRGBAColour(t, new Marker());
+
+            Assert.Equal(r, colour.R);
+            Assert.Equal(g, colour.G);
+            Assert.Equal(b, colour.B);
+            Assert.Equal(a, colour.A);
+        }
+
+        [Theory]
+        [InlineData("rgb(0, 0, 0)", 0, 0, 0)]
+        [InlineData("rgb(100, 0, 0)", 100, 0, 0)]
+        [InlineData("rgb(100, 120, 200)", 100, 120, 200)]
+        [InlineData("rgb(225, 225, 225)", 225, 225, 225)]
+        public void ImportRGBAColourTest4(string t, int r, int g, int b)
+        {
+            var colour = Importer.GetRGBAColour(t, new Marker());
+
+            Assert.Equal(r, colour.R);
+            Assert.Equal(g, colour.G);
+            Assert.Equal(b, colour.B);
+        }
+
+        [Theory]
+        [InlineData("hsla(0, 0%, 0%, 0%)", 0, 0, 0, 0)]
+        [InlineData("hsla(60, 100%, 100%, 0%)", 60, 100, 100, 0)]
+        [InlineData("hsla(220, 100%, 100%, 0%)", 220, 100, 100, 0)]
+        [InlineData("hsla(359, 100%, 100%, 0%)", 359, 100, 100, 0)]
+        [InlineData("hsla(120, 50%, 50%, 50%)", 120, 50, 50, 50)]
+        public void ImportHSLAColourTest1(string t, int h, int s, int l, int a)
+        {
+            var colour = Importer.GetHSLAColour(t, new Marker());
+
+            Assert.Equal(h, colour.H);
+            Assert.Equal(s, (int)(100 * colour.S / 255.0));
+            Assert.Equal(l, (int)(100 * colour.L / 255.0));
+            Assert.Equal(a, (int)(100 * colour.A / 255.0));
+        }
     }
 }

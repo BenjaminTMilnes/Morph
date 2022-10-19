@@ -449,7 +449,12 @@ namespace Morph
                 ValidateRGBAColourValue(l);
                 ValidateRGBAColourValue(a);
 
-                return new MHSLAColour((int)h, (int)s, (int)l, (int)a);
+                var hi = (h is MPercentage) ? (int)((h as MPercentage).Value * 360) : int.Parse((h as MNumber).Value);
+                var si = (s is MPercentage) ? (int)((s as MPercentage).Value * 255) : int.Parse((s as MNumber).Value);
+                var li = (l is MPercentage) ? (int)((l as MPercentage).Value * 255) : int.Parse((l as MNumber).Value);
+                var ai = (a is MPercentage) ? (int)((a as MPercentage).Value * 255) : int.Parse((a as MNumber).Value);
+
+                return new MHSLAColour(hi, si, li, ai);
             }
 
             c = inputText.Substring(m.P, 3);
@@ -478,7 +483,11 @@ namespace Morph
                 ValidateRGBAColourValue(s);
                 ValidateRGBAColourValue(l);
 
-                return new MHSLColour((int)h, (int)s, (int)l);
+                var hi = (h is MPercentage) ? (int)((h as MPercentage).Value * 360) : int.Parse((h as MNumber).Value);
+                var si = (s is MPercentage) ? (int)((s as MPercentage).Value * 255) : int.Parse((s as MNumber).Value);
+                var li = (l is MPercentage) ? (int)((l as MPercentage).Value * 255) : int.Parse((l as MNumber).Value);
+
+                return new MHSLColour(hi, si, li);
             }
 
             return null;
@@ -541,7 +550,12 @@ namespace Morph
                 ValidateRGBAColourValue(b);
                 ValidateRGBAColourValue(a);
 
-                return new MRGBAColour((int)r, (int)g, (int)b, (int)a);
+                var ri = (r is MPercentage) ? (int)((r as MPercentage).Value * 255) : int.Parse((r as MNumber).Value);
+                var gi = (g is MPercentage) ? (int)((g as MPercentage).Value * 255) : int.Parse((g as MNumber).Value);
+                var bi = (b is MPercentage) ? (int)((b as MPercentage).Value * 255) : int.Parse((b as MNumber).Value);
+                var ai = (a is MPercentage) ? (int)((a as MPercentage).Value * 255) : int.Parse((a as MNumber).Value);
+
+                return new MRGBAColour(ri, gi, bi, ai);
             }
 
             c = inputText.Substring(m.P, 3);
@@ -570,7 +584,11 @@ namespace Morph
                 ValidateRGBAColourValue(g);
                 ValidateRGBAColourValue(b);
 
-                return new MRGBColour((int)r, (int)g, (int)b);
+                var ri = (r is MPercentage) ? (int)((r as MPercentage).Value * 255) : int.Parse((r as MNumber).Value);
+                var gi = (g is MPercentage) ? (int)((g as MPercentage).Value * 255) : int.Parse((g as MNumber).Value);
+                var bi = (b is MPercentage) ? (int)((b as MPercentage).Value * 255) : int.Parse((b as MNumber).Value);
+
+                return new MRGBColour(ri, gi, bi);
             }
 
             return null;
