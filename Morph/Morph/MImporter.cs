@@ -602,8 +602,6 @@ namespace Morph
         {
             var m = marker.Copy();
 
-            var start = m.P;
-
             var c = inputText.Substring(m.P, 1)[0];
 
             if (c != '#')
@@ -612,6 +610,8 @@ namespace Morph
             }
 
             m.P++;
+
+            var start = m.P;
 
             while (m.P < inputText.Length)
             {
