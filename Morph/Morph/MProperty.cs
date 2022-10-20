@@ -4,6 +4,9 @@ using System.Text;
 
 namespace Morph
 {
+    /// <summary>
+    /// Represents a Morph style property. 
+    /// </summary>
     public class MProperty
     {
         public string Name { get; set; }
@@ -17,7 +20,7 @@ namespace Morph
 
         public override string ToString()
         {
-            return string.Format("{0}: {1}", Name.Trim(), Value.ToString().Trim());
+            return string.Format("{0}: {1};", Name.Trim(), Value.ToString().Trim());
         }
     }
 }
