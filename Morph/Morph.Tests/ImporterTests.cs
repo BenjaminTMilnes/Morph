@@ -149,33 +149,33 @@ namespace Morph.Tests
 
         [Theory]
         [InlineData("hsla(0, 0%, 0%, 0%)", 0, 0, 0, 0)]
-        [InlineData("hsla(60, 100%, 100%, 0%)", 60, 100, 100, 0)]
-        [InlineData("hsla(220, 100%, 100%, 0%)", 220, 100, 100, 0)]
-        [InlineData("hsla(359, 100%, 100%, 0%)", 359, 100, 100, 0)]
-        [InlineData("hsla(120, 50%, 50%, 50%)", 120, 50, 50, 50)]
-        public void ImportHSLAColourTest1(string t, int h, int s, int l, int a)
+        [InlineData("hsla(60, 100%, 100%, 0%)", 60, 1, 1, 0)]
+        [InlineData("hsla(220, 100%, 100%, 0%)", 220, 1, 1, 0)]
+        [InlineData("hsla(359, 100%, 100%, 0%)", 359, 1, 1, 0)]
+        [InlineData("hsla(120, 50%, 50%, 50%)", 120, 0.5, 0.5, 0.5)]
+        public void ImportHSLAColourTest1(string t, double h, double s, double l, double a)
         {
             var colour = Importer.GetHSLAColour(t, new Marker());
 
             Assert.Equal(h, colour.H);
-            Assert.Equal(s, (int)(100 * colour.S / 255.0));
-            Assert.Equal(l, (int)(100 * colour.L / 255.0));
-            Assert.Equal(a, (int)(100 * colour.A / 255.0));
+            Assert.Equal(s, colour.S);
+            Assert.Equal(l, colour.L);
+            Assert.Equal(a, colour.A);
         }
 
         [Theory]
         [InlineData("hsl(0, 0%, 0%)", 0, 0, 0)]
-        [InlineData("hsl(60, 100%, 100%)", 60, 100, 100)]
-        [InlineData("hsl(220, 100%, 100%)", 220, 100, 100)]
-        [InlineData("hsl(359, 100%, 100%)", 359, 100, 100)]
-        [InlineData("hsl(120, 50%, 50%)", 120, 50, 50)]
-        public void ImportHSLAColourTest2(string t, int h, int s, int l)
+        [InlineData("hsl(60, 100%, 100%)", 60, 1, 1)]
+        [InlineData("hsl(220, 100%, 100%)", 220, 1, 1)]
+        [InlineData("hsl(359, 100%, 100%)", 359, 1, 1)]
+        [InlineData("hsl(120, 50%, 50%)", 120, 0.5, 0.5)]
+        public void ImportHSLAColourTest2(string t, double h, double s, double l)
         {
             var colour = Importer.GetHSLAColour(t, new Marker());
 
             Assert.Equal(h, colour.H);
-            Assert.Equal(s, (int)(100 * colour.S / 255.0));
-            Assert.Equal(l, (int)(100 * colour.L / 255.0));
+            Assert.Equal(s, colour.S);
+            Assert.Equal(l, colour.L);
         }
 
         [Theory]

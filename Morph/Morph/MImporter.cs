@@ -425,12 +425,22 @@ namespace Morph
             t = t.Trim();
 
             return t;
-
         }
 
+        /// <summary>
+        /// Gets a HSLA colour at the current position and returns it.
+        /// </summary>
+        /// <param name="inputText"></param>
+        /// <param name="marker"></param>
+        /// <returns></returns>
         public MHSLAColour GetHSLAColour(string inputText, Marker marker)
         {
             var m = marker.Copy();
+
+            if (m.P > inputText.Length - 4)
+            {
+                return null;
+            }
 
             var c = inputText.Substring(m.P, 4);
 
@@ -455,16 +465,16 @@ namespace Morph
                 var l = ns[2];
                 var a = ns[3];
 
-                ValidateRGBAColourValue(s);
-                ValidateRGBAColourValue(l);
-                ValidateRGBAColourValue(a);
+                ValidateHSLAColourValue(s);
+                ValidateHSLAColourValue(l);
+                ValidateHSLAColourValue(a);
 
-                var hi = (h is MPercentage) ? (int)((h as MPercentage).Value * 360) : int.Parse((h as MNumber).Value);
-                var si = (s is MPercentage) ? (int)((s as MPercentage).Value * 255) : int.Parse((s as MNumber).Value);
-                var li = (l is MPercentage) ? (int)((l as MPercentage).Value * 255) : int.Parse((l as MNumber).Value);
-                var ai = (a is MPercentage) ? (int)((a as MPercentage).Value * 255) : int.Parse((a as MNumber).Value);
+                var hd = double.Parse((h as MNumber).Value);
+                var sd = GetSLAColourValue(s);
+                var ld = GetSLAColourValue(l);
+                var ad = GetSLAColourValue(a);
 
-                return new MHSLAColour(hi, si, li, ai);
+                return new MHSLAColour(hd, sd, ld, ad);
             }
 
             c = inputText.Substring(m.P, 3);
@@ -489,14 +499,14 @@ namespace Morph
                 var s = ns[1];
                 var l = ns[2];
 
-                ValidateRGBAColourValue(s);
-                ValidateRGBAColourValue(l);
+                ValidateHSLAColourValue(s);
+                ValidateHSLAColourValue(l);
 
-                var hi = (h is MPercentage) ? (int)((h as MPercentage).Value * 360) : int.Parse((h as MNumber).Value);
-                var si = (s is MPercentage) ? (int)((s as MPercentage).Value * 255) : int.Parse((s as MNumber).Value);
-                var li = (l is MPercentage) ? (int)((l as MPercentage).Value * 255) : int.Parse((l as MNumber).Value);
+                var hd = double.Parse((h as MNumber).Value);
+                var sd = GetSLAColourValue(s);
+                var ld = GetSLAColourValue(l);
 
-                return new MHSLColour(hi, si, li);
+                return new MHSLColour(hd, sd, ld);
             }
 
             return null;
@@ -614,6 +624,18 @@ namespace Morph
             return null;
         }
 
+        public double GetSLAColourValue(object n)
+        {
+            if (n is MPercentage)
+            {
+                return (n as MPercentage).Value;
+            }
+            else
+            {
+                return double.Parse((n as MNumber).Value);
+            }
+        }
+
         public int GetRGBAColourValueAsInteger(object n)
         {
             if (n is MPercentage)
@@ -623,6 +645,32 @@ namespace Morph
             else
             {
                 return int.Parse((n as MNumber).Value);
+            }
+        }
+
+        /// <summary>
+        /// Checks that a number is valid as a HSLA colour value.
+        /// </summary>
+        /// <param name="value"></param>
+        public void ValidateHSLAColourValue(object value)
+        {
+            if (value is MNumber)
+            {
+                var v = double.Parse((value as MNumber).Value);
+
+                if (v < 0 || v > 1)
+                {
+                    throw new MorphSyntaxError("HSLA colour values must be between 0 and 1.");
+                }
+            }
+            if (value is MPercentage)
+            {
+                var v = (value as MPercentage).Value * 100;
+
+                if (v < 0 || v > 100)
+                {
+                    throw new MorphSyntaxError("HSLA colour values must be between 0% and 100%.");
+                }
             }
         }
 
