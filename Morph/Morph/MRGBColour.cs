@@ -4,6 +4,9 @@ using System.Text;
 
 namespace Morph
 {
+    /// <summary>
+    /// Represents an RGB colour in Morph. An RGB colour is just an RGBA colour where a = 0.
+    /// </summary>
     public class MRGBColour : MRGBAColour
     {
         public MRGBColour(int r = 0, int g = 0, int b = 0) : base(r, g, b, 0) { }

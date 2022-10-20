@@ -4,14 +4,17 @@ using System.Text;
 
 namespace Morph
 {
+    /// <summary>
+    /// Represents a HSLA colour in Morph.
+    /// </summary>
     public class MHSLAColour : MColour
     {
-        public int H { get; set; }
-        public int S { get; set; }
-        public int L { get; set; }
-        public int A { get; set; }
+        public double H { get; set; }
+        public double S { get; set; }
+        public double L { get; set; }
+        public double A { get; set; }
 
-        public MHSLAColour(int h = 0, int s = 0, int l = 0, int a = 0)
+        public MHSLAColour(double h = 0, double s = 0, double l = 0, double a = 0)
         {
             H = h;
             S = s;
@@ -21,7 +24,7 @@ namespace Morph
 
         public override string ToString()
         {
-            return string.Format("hsla({0}, {1}, {2}, {3})", H, S, L, A);
+            return string.Format("hsla({0}, {1:F3}, {2:F3}, {3:F3})", H, S, L, A);
         }
     }
 }
