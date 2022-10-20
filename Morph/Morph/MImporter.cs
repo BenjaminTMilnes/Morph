@@ -248,6 +248,12 @@ namespace Morph
             return new MElementNameSelector(t);
         }
 
+        /// <summary>
+        /// Gets a list of properties at the current position and returns it.
+        /// </summary>
+        /// <param name="inputText"></param>
+        /// <param name="marker"></param>
+        /// <returns></returns>
         public List<MProperty> GetProperties(string inputText, Marker marker)
         {
             var m = marker.Copy();
@@ -285,6 +291,11 @@ namespace Morph
             }
 
             GetWhiteSpace(inputText, m);
+
+            if (m.P >= inputText.Length)
+            {
+                return null;
+            }
 
             c = inputText.Substring(m.P, 1)[0];
 
