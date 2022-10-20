@@ -300,6 +300,12 @@ namespace Morph
             return properties;
         }
 
+        /// <summary>
+        /// Gets a property at the current position and returns it.
+        /// </summary>
+        /// <param name="inputText"></param>
+        /// <param name="marker"></param>
+        /// <returns></returns>
         public MProperty GetProperty(string inputText, Marker marker)
         {
             var m = marker.Copy();
@@ -315,6 +321,11 @@ namespace Morph
 
             GetWhiteSpace(inputText, m);
 
+            if (m.P >= inputText.Length)
+            {
+                return null;
+            }
+
             var c = inputText.Substring(m.P, 1)[0];
 
             if (c != ':')
@@ -327,6 +338,11 @@ namespace Morph
             var value = GetPropertyValue(inputText, m);
 
             if (value == null)
+            {
+                return null;
+            }
+
+            if (m.P >= inputText.Length)
             {
                 return null;
             }
@@ -345,6 +361,12 @@ namespace Morph
             return new MProperty(name, value);
         }
 
+        /// <summary>
+        /// Gets a property name at the current position and returns it.
+        /// </summary>
+        /// <param name="inputText"></param>
+        /// <param name="marker"></param>
+        /// <returns></returns>
         public string GetPropertyName(string inputText, Marker marker)
         {
             var start = marker.P;
@@ -375,6 +397,12 @@ namespace Morph
             return t;
         }
 
+        /// <summary>
+        /// Gets a property value at the current position and returns it.
+        /// </summary>
+        /// <param name="inputText"></param>
+        /// <param name="marker"></param>
+        /// <returns></returns>
         public object GetPropertyValue(string inputText, Marker marker)
         {
             var lengthSet = GetLengthSet(inputText, marker);
