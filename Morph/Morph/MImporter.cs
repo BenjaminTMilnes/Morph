@@ -43,7 +43,7 @@ namespace Morph
 
             var styleRules = new List<MStyleRule>();
 
-            while (true)
+            while (marker.P < inputText.Length)
             {
                 var styleRule = GetStyleRule(inputText, marker);
 
@@ -94,7 +94,7 @@ namespace Morph
 
             var selectors = new List<IMSelector>();
 
-            while (true)
+            while (m.P < inputText.Length)
             {
                 var idSelector = GetIdSelector(inputText, m);
 
@@ -166,6 +166,8 @@ namespace Morph
 
             var t = inputText.Substring(start, end - start);
 
+            marker.P = m.P;
+
             return new MIdSelector(t);
         }
 
@@ -207,6 +209,8 @@ namespace Morph
 
             var t = inputText.Substring(start, end - start);
 
+            marker.P = m.P;
+
             return new MClassSelector(t);
         }
 
@@ -239,6 +243,8 @@ namespace Morph
 
             var t = inputText.Substring(start, end - start);
 
+            marker.P = m.P;
+
             return new MElementNameSelector(t);
         }
 
@@ -247,6 +253,11 @@ namespace Morph
             var m = marker.Copy();
 
             GetWhiteSpace(inputText, m);
+
+            if (m.P >= inputText.Length)
+            {
+                return null;
+            }
 
             var c = inputText.Substring(m.P, 1)[0];
 

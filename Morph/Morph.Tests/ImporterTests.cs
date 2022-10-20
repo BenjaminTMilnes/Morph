@@ -162,5 +162,93 @@ namespace Morph.Tests
             Assert.Equal(l, (int)(100 * colour.L / 255.0));
             Assert.Equal(a, (int)(100 * colour.A / 255.0));
         }
+
+        [Theory]
+        [InlineData("page-size: a4;", "page-size", "a4")]
+        [InlineData("page-margin: 2cm 2cm 2cm 2cm;", "page-margin", "2cm 2cm 2cm 2cm")]
+        [InlineData("font-name: 'Open Sans', sans-serif;", "font-name", "'Open Sans', sans-serif")]
+        [InlineData("font-colour: hsl(350, 60%, 60%);", "font-colour", "hsl(350, 60%, 60%)")]
+        [InlineData("font-colour: #dd0000;", "font-colour", "#dd0000")]
+        [InlineData("font-colour: #dd000088;", "font-colour", "#dd000088")]
+        [InlineData("font-colour: black;", "font-colour", "black")]
+        public void ImportPropertyTest1(string text, string name, string value)
+        {
+            var property = Importer.GetProperty(text, new Marker());
+
+            Assert.Equal(name, property.Name);
+            Assert.Equal(value, property.Value.ToString());
+        }
+
+        [Fact]
+        public void ImportDocumentTest1()
+        {
+            var text = @"
+                            p {
+                                font-size: 12pt;
+                                font-colour   :   black   ;
+                                margin   :12pt 16pt   ;
+                            }
+
+                            .red { font-colour: red; }
+
+                            #infobox {
+                                border: 1px solid blue;
+                            }
+                        ";
+
+            var document = Importer.ImportDocument(text);
+
+            Assert.Equal(3, document.StyleRules.Count);
+
+            var sr1 = document.StyleRules[0];
+            var sr2 = document.StyleRules[1];
+            var sr3 = document.StyleRules[2];
+
+            Assert.Equal(1, sr1.Selectors.Count);
+            Assert.Equal(3, sr1.Properties.Count);
+
+            var p1 = sr1.Properties[0];
+            var p2 = sr1.Properties[1];
+            var p3 = sr1.Properties[2];
+
+            Assert.Equal("font-size", p1.Name);
+
+            var ls1 = new MLengthSet();
+
+            ls1.Lengths.Add(new MLength("12", "pt"));
+
+            Assert.True(p1.Value is MLengthSet);
+            Assert.Equal(1, (p1.Value as MLengthSet).Lengths.Count);
+            Assert.Equal(ls1.ToString(), p1.Value.ToString());
+
+            Assert.Equal("font-colour", p2.Name);
+            Assert.Equal("black", p2.Value.ToString());
+
+            Assert.Equal("margin", p3.Name);
+
+            var ls2 = new MLengthSet();
+
+            ls2.Lengths.Add(new MLength("12", "pt"));
+            ls2.Lengths.Add(new MLength("16", "pt"));
+
+            Assert.True(p3.Value is MLengthSet);
+            Assert.Equal(2, (p3.Value as MLengthSet).Lengths.Count);
+            Assert.Equal(ls2.ToString(), p3.Value.ToString());
+
+            Assert.Equal(1, sr2.Selectors.Count);
+            Assert.Equal(1, sr2.Properties.Count);
+
+            var p4 = sr2.Properties[0];
+
+            Assert.Equal("font-colour", p4.Name);
+            Assert.Equal("red", p4.Value.ToString());
+
+            Assert.Equal(1, sr3.Selectors.Count);
+            Assert.Equal(1, sr3.Properties.Count);
+
+            var s3 = sr3.Selectors[0] as MIdSelector;
+
+            Assert.Equal("infobox", s3.Id);
+        }
     }
 }
