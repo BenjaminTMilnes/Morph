@@ -4,6 +4,9 @@ using System.Text;
 
 namespace Morph
 {
+    /// <summary>
+    /// Represents a Morph id selector. These work in the same way as CSS id selectors.
+    /// </summary>
     public class MIdSelector : IMSelector
     {
         public string Id { get; set; }

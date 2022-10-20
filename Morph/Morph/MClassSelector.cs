@@ -4,6 +4,9 @@ using System.Text;
 
 namespace Morph
 {
+    /// <summary>
+    /// Represents a Morph class selector. These work in the same way as CSS class selectors.
+    /// </summary>
     public class MClassSelector : IMSelector
     {
         public string ClassName { get; set; }
