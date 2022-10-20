@@ -164,6 +164,21 @@ namespace Morph.Tests
         }
 
         [Theory]
+        [InlineData("hsl(0, 0%, 0%)", 0, 0, 0)]
+        [InlineData("hsl(60, 100%, 100%)", 60, 100, 100)]
+        [InlineData("hsl(220, 100%, 100%)", 220, 100, 100)]
+        [InlineData("hsl(359, 100%, 100%)", 359, 100, 100)]
+        [InlineData("hsl(120, 50%, 50%)", 120, 50, 50)]
+        public void ImportHSLAColourTest2(string t, int h, int s, int l)
+        {
+            var colour = Importer.GetHSLAColour(t, new Marker());
+
+            Assert.Equal(h, colour.H);
+            Assert.Equal(s, (int)(100 * colour.S / 255.0));
+            Assert.Equal(l, (int)(100 * colour.L / 255.0));
+        }
+
+        [Theory]
         [InlineData("page-size: a4;", "page-size", "a4")]
         [InlineData("page-margin: 2cm 2cm 2cm 2cm;", "page-margin", "2cm 2cm 2cm 2cm")]
         [InlineData("font-name: 'Open Sans', sans-serif;", "font-name", "'Open Sans', sans-serif")]

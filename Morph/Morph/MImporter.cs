@@ -455,7 +455,6 @@ namespace Morph
                 var l = ns[2];
                 var a = ns[3];
 
-                ValidateRGBAColourValue(h);
                 ValidateRGBAColourValue(s);
                 ValidateRGBAColourValue(l);
                 ValidateRGBAColourValue(a);
@@ -490,7 +489,6 @@ namespace Morph
                 var s = ns[1];
                 var l = ns[2];
 
-                ValidateRGBAColourValue(h);
                 ValidateRGBAColourValue(s);
                 ValidateRGBAColourValue(l);
 
