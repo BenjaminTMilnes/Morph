@@ -728,6 +728,12 @@ namespace Morph
             return numbers;
         }
 
+        /// <summary>
+        /// Gets a percentage at the current position and returns it.
+        /// </summary>
+        /// <param name="inputText"></param>
+        /// <param name="marker"></param>
+        /// <returns></returns>
         public MPercentage GetPercentage(string inputText, Marker marker)
         {
             var m = marker.Copy();
@@ -735,6 +741,11 @@ namespace Morph
             var number = GetNumber(inputText, m);
 
             if (number == null)
+            {
+                return null;
+            }
+
+            if (m.P >= inputText.Length)
             {
                 return null;
             }
@@ -752,13 +763,19 @@ namespace Morph
             return new MPercentage(double.Parse(number.Value) / 100);
         }
 
+        /// <summary>
+        /// Gets a length set at the current position and returns it.
+        /// </summary>
+        /// <param name="inputText"></param>
+        /// <param name="marker"></param>
+        /// <returns></returns>
         public MLengthSet GetLengthSet(string inputText, Marker marker)
         {
             var m = marker.Copy();
 
             var lengths = new List<MLength>();
 
-            while (true)
+            while (m.P < inputText.Length)
             {
                 GetWhiteSpace(inputText, m);
 
@@ -788,6 +805,12 @@ namespace Morph
             return lengthSet;
         }
 
+        /// <summary>
+        /// Gets a length at the current position and returns it.
+        /// </summary>
+        /// <param name="inputText"></param>
+        /// <param name="marker"></param>
+        /// <returns></returns>
         public MLength GetLength(string inputText, Marker marker)
         {
             var m = marker.Copy();
@@ -818,8 +841,16 @@ namespace Morph
             return length;
         }
 
+        /// <summary>
+        /// Gets a number at the current position and returns it.
+        /// </summary>
+        /// <param name="inputText"></param>
+        /// <param name="marker"></param>
+        /// <returns></returns>
         public MNumber GetNumber(string inputText, Marker marker)
         {
+            // This is a very basic function for finding a decimal number. It doesn't account for things like thousands separators or standard form. This can be upgraded later if necessary.
+
             var start = marker.P;
             var q = 0;
 
@@ -859,6 +890,12 @@ namespace Morph
             return new MNumber(t);
         }
 
+        /// <summary>
+        /// Gets a length unit at the current position and returns it.
+        /// </summary>
+        /// <param name="inputText"></param>
+        /// <param name="marker"></param>
+        /// <returns></returns>
         public MLengthUnit GetLengthUnit(string inputText, Marker marker)
         {
             foreach (var lengthUnit in LengthUnits)
