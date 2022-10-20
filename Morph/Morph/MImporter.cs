@@ -504,6 +504,12 @@ namespace Morph
             return null;
         }
 
+        /// <summary>
+        /// Gets an RGBA colour at the current position and returns it.
+        /// </summary>
+        /// <param name="inputText"></param>
+        /// <param name="marker"></param>
+        /// <returns></returns>
         public MRGBAColour GetRGBAColour(string inputText, Marker marker)
         {
             var m = marker.Copy();
@@ -531,6 +537,11 @@ namespace Morph
                 {
                     return new MRGBColour(r, g, b);
                 }
+            }
+
+            if (m.P > inputText.Length - 4)
+            {
+                return null;
             }
 
             var c = inputText.Substring(m.P, 4);
@@ -561,10 +572,10 @@ namespace Morph
                 ValidateRGBAColourValue(b);
                 ValidateRGBAColourValue(a);
 
-                var ri = (r is MPercentage) ? (int)((r as MPercentage).Value * 255) : int.Parse((r as MNumber).Value);
-                var gi = (g is MPercentage) ? (int)((g as MPercentage).Value * 255) : int.Parse((g as MNumber).Value);
-                var bi = (b is MPercentage) ? (int)((b as MPercentage).Value * 255) : int.Parse((b as MNumber).Value);
-                var ai = (a is MPercentage) ? (int)((a as MPercentage).Value * 255) : int.Parse((a as MNumber).Value);
+                var ri = GetRGBAColourValueAsInteger(r);
+                var gi = GetRGBAColourValueAsInteger(g);
+                var bi = GetRGBAColourValueAsInteger(b);
+                var ai = GetRGBAColourValueAsInteger(a);
 
                 return new MRGBAColour(ri, gi, bi, ai);
             }
@@ -595,9 +606,9 @@ namespace Morph
                 ValidateRGBAColourValue(g);
                 ValidateRGBAColourValue(b);
 
-                var ri = (r is MPercentage) ? (int)((r as MPercentage).Value * 255) : int.Parse((r as MNumber).Value);
-                var gi = (g is MPercentage) ? (int)((g as MPercentage).Value * 255) : int.Parse((g as MNumber).Value);
-                var bi = (b is MPercentage) ? (int)((b as MPercentage).Value * 255) : int.Parse((b as MNumber).Value);
+                var ri = GetRGBAColourValueAsInteger(r);
+                var gi = GetRGBAColourValueAsInteger(g);
+                var bi = GetRGBAColourValueAsInteger(b);
 
                 return new MRGBColour(ri, gi, bi);
             }
@@ -605,6 +616,22 @@ namespace Morph
             return null;
         }
 
+        public int GetRGBAColourValueAsInteger(object n)
+        {
+            if (n is MPercentage)
+            {
+                return (int)((n as MPercentage).Value * 255);
+            }
+            else
+            {
+                return int.Parse((n as MNumber).Value);
+            }
+        }
+
+        /// <summary>
+        /// Checks that a number is valid as an RGBA colour value.
+        /// </summary>
+        /// <param name="value"></param>
         public void ValidateRGBAColourValue(object value)
         {
             if (value is MNumber)
@@ -627,9 +654,20 @@ namespace Morph
             }
         }
 
+        /// <summary>
+        /// Gets a hexadecimal number at the current position and returns it.
+        /// </summary>
+        /// <param name="inputText"></param>
+        /// <param name="marker"></param>
+        /// <returns></returns>
         public string GetHexadecimalNumber(string inputText, Marker marker)
         {
             var m = marker.Copy();
+
+            if (m.P >= inputText.Length)
+            {
+                return null;
+            }
 
             var c = inputText.Substring(m.P, 1)[0];
 
@@ -670,9 +708,20 @@ namespace Morph
             return t;
         }
 
+        /// <summary>
+        /// Gets a number set at the current position and returns it. A number set is simply a list of numbers and percentages.
+        /// </summary>
+        /// <param name="inputText"></param>
+        /// <param name="marker"></param>
+        /// <returns></returns>
         public List<object> GetNumberSet(string inputText, Marker marker)
         {
             var m = marker.Copy();
+
+            if (m.P >= inputText.Length)
+            {
+                return null;
+            }
 
             var c = inputText.Substring(m.P, 1);
 
@@ -685,7 +734,7 @@ namespace Morph
 
             var numbers = new List<object>();
 
-            while (true)
+            while (m.P < inputText.Length)
             {
                 GetWhiteSpace(inputText, m);
 
@@ -706,6 +755,11 @@ namespace Morph
                 }
 
                 GetWhiteSpace(inputText, m);
+
+                if (m.P >= inputText.Length)
+                {
+                    break;
+                }
 
                 c = inputText.Substring(m.P, 1);
 
