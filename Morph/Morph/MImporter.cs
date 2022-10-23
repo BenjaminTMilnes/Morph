@@ -884,19 +884,11 @@ namespace Morph
                 return null;
             }
 
-            if (m.P >= inputText.Length)
+            if (Expect(inputText, m, "%") == false)
             {
                 return null;
             }
 
-            var c = inputText.Substring(m.P, 1);
-
-            if (c != "%")
-            {
-                return null;
-            }
-
-            m.P++;
             marker.P = m.P;
 
             return new MPercentage(double.Parse(number.Value) / 100);
