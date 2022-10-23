@@ -9,11 +9,11 @@ namespace Morph
     /// </summary>
     public class MHSLColour : MHSLAColour
     {
-        public MHSLColour(double h = 0, double s = 0, double l = 0) : base(h, s, l, 0) { }
+        public MHSLColour(IMNumeric h, IMNumeric s, IMNumeric l) : base(h, s, l, new MNumber("0")) { }
 
         public override string ToString()
         {
-            return string.Format("hsl({0}, {1:F3}, {2:F3})", H, S, L);
+            return string.Format("hsl({0}, {1}, {2})", H, S, L);
         }
     }
 }

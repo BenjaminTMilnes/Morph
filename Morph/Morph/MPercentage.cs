@@ -7,7 +7,7 @@ namespace Morph
     /// <summary>
     /// Represents a percentage in a Morph document.
     /// </summary>
-    public class MPercentage
+    public class MPercentage : IMNumeric
     {
         public string Text { get; set; }
 

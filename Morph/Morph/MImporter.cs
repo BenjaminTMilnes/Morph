@@ -468,14 +468,9 @@ namespace Morph
                 ValidateHSLAColourValue(l);
                 ValidateHSLAColourValue(a);
 
-                var hd = (h as MNumber).Value;
-                var sd = GetSLAColourValue(s);
-                var ld = GetSLAColourValue(l);
-                var ad = GetSLAColourValue(a);
-
                 marker.P = m.P;
 
-                return new MHSLAColour(hd, sd, ld, ad);
+                return new MHSLAColour(h, s, l, a);
             }
 
             c = inputText.Substring(m.P, 3);
@@ -503,13 +498,9 @@ namespace Morph
                 ValidateHSLAColourValue(s);
                 ValidateHSLAColourValue(l);
 
-                var hd = (h as MNumber).Value;
-                var sd = GetSLAColourValue(s);
-                var ld = GetSLAColourValue(l);
-
                 marker.P = m.P;
 
-                return new MHSLColour(hd, sd, ld);
+                return new MHSLColour(h, s, l);
             }
 
             return null;
@@ -762,7 +753,7 @@ namespace Morph
         /// <param name="inputText"></param>
         /// <param name="marker"></param>
         /// <returns></returns>
-        public List<object> GetNumberSet(string inputText, Marker marker)
+        public List<IMNumeric> GetNumberSet(string inputText, Marker marker)
         {
             var m = marker.Copy();
 
@@ -771,7 +762,7 @@ namespace Morph
                 return null;
             }
 
-            var numbers = new List<object>();
+            var numbers = new List<IMNumeric>();
 
             while (m.P < inputText.Length)
             {

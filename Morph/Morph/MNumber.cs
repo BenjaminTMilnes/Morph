@@ -7,7 +7,7 @@ namespace Morph
     /// <summary>
     /// Represents a decimal number in a Morph document. This class just acts as a container for a number written as a string.
     /// </summary>
-    public class MNumber
+    public class MNumber : IMNumeric
     {
         public string Text { get; set; }
 

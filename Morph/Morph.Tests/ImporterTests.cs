@@ -356,10 +356,10 @@ namespace Morph.Tests
         {
             var colour = Importer.GetHSLAColour(t, new Marker());
 
-            Assert.Equal(h, colour.H);
-            Assert.Equal(s, colour.S);
-            Assert.Equal(l, colour.L);
-            Assert.Equal(a, colour.A);
+            Assert.Equal(h, colour.H.Value);
+            Assert.Equal(s, colour.S.Value);
+            Assert.Equal(l, colour.L.Value);
+            Assert.Equal(a, colour.A.Value);
         }
 
         [Theory]
@@ -372,9 +372,9 @@ namespace Morph.Tests
         {
             var colour = Importer.GetHSLAColour(t, new Marker());
 
-            Assert.Equal(h, colour.H);
-            Assert.Equal(s, colour.S);
-            Assert.Equal(l, colour.L);
+            Assert.Equal(h, colour.H.Value);
+            Assert.Equal(s, colour.S.Value);
+            Assert.Equal(l, colour.L.Value);
         }
 
         [Theory]

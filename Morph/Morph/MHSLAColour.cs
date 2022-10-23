@@ -9,12 +9,12 @@ namespace Morph
     /// </summary>
     public class MHSLAColour : MColour
     {
-        public double H { get; set; }
-        public double S { get; set; }
-        public double L { get; set; }
-        public double A { get; set; }
+        public IMNumeric H { get; set; }
+        public IMNumeric S { get; set; }
+        public IMNumeric L { get; set; }
+        public IMNumeric A { get; set; }
 
-        public MHSLAColour(double h = 0, double s = 0, double l = 0, double a = 0)
+        public MHSLAColour(IMNumeric h, IMNumeric s, IMNumeric l, IMNumeric a)
         {
             H = h;
             S = s;
@@ -24,7 +24,7 @@ namespace Morph
 
         public override string ToString()
         {
-            return string.Format("hsla({0}, {1:F3}, {2:F3}, {3:F3})", H, S, L, A);
+            return string.Format("hsla({0}, {1}, {2}, {3})", H, S, L, A);
         }
     }
 }
