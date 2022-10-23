@@ -525,13 +525,13 @@ namespace Morph
                     throw new MorphSyntaxError(string.Format("'#{0}' is not a valid hexadecimal colour code.", hn));
                 }
 
-                var r = Convert.ToInt32(hn.Substring(0, 2), 16);
-                var g = Convert.ToInt32(hn.Substring(2, 2), 16);
-                var b = Convert.ToInt32(hn.Substring(4, 2), 16);
+                var r = new MNumber(Convert.ToInt32(hn.Substring(0, 2), 16).ToString());
+                var g = new MNumber(Convert.ToInt32(hn.Substring(2, 2), 16).ToString());
+                var b = new MNumber(Convert.ToInt32(hn.Substring(4, 2), 16).ToString());
 
                 if (hn.Length == 8)
                 {
-                    var a = Convert.ToInt32(hn.Substring(6, 2), 16);
+                    var a = new MNumber(Convert.ToInt32(hn.Substring(6, 2), 16).ToString());
 
                     marker.P = m.P;
 
@@ -578,14 +578,9 @@ namespace Morph
                 ValidateRGBAColourValue(b);
                 ValidateRGBAColourValue(a);
 
-                var ri = GetRGBAColourValueAsInteger(r);
-                var gi = GetRGBAColourValueAsInteger(g);
-                var bi = GetRGBAColourValueAsInteger(b);
-                var ai = GetRGBAColourValueAsInteger(a);
-
                 marker.P = m.P;
 
-                return new MRGBAColour(ri, gi, bi, ai);
+                return new MRGBAColour(r, g, b, a);
             }
 
             c = inputText.Substring(m.P, 3);
@@ -614,13 +609,9 @@ namespace Morph
                 ValidateRGBAColourValue(g);
                 ValidateRGBAColourValue(b);
 
-                var ri = GetRGBAColourValueAsInteger(r);
-                var gi = GetRGBAColourValueAsInteger(g);
-                var bi = GetRGBAColourValueAsInteger(b);
-
                 marker.P = m.P;
 
-                return new MRGBColour(ri, gi, bi);
+                return new MRGBColour(r, g, b);
             }
 
             return null;

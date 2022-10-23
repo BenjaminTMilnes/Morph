@@ -293,10 +293,10 @@ namespace Morph.Tests
         {
             var colour = Importer.GetRGBAColour(t, new Marker());
 
-            Assert.Equal(r, colour.R);
-            Assert.Equal(g, colour.G);
-            Assert.Equal(b, colour.B);
-            Assert.Equal(a, colour.A);
+            Assert.Equal(r, colour.R.Value);
+            Assert.Equal(g, colour.G.Value);
+            Assert.Equal(b, colour.B.Value);
+            Assert.Equal(a, colour.A.Value);
         }
 
         [Theory]
@@ -310,26 +310,26 @@ namespace Morph.Tests
         {
             var colour = Importer.GetRGBAColour(t, new Marker());
 
-            Assert.Equal(r, colour.R);
-            Assert.Equal(g, colour.G);
-            Assert.Equal(b, colour.B);
-            Assert.Equal(0, colour.A);
+            Assert.Equal(r, colour.R.Value);
+            Assert.Equal(g, colour.G.Value);
+            Assert.Equal(b, colour.B.Value);
+            Assert.Equal(0, colour.A.Value);
         }
 
         [Theory]
         [InlineData("rgba(0, 0, 0, 0%)", 0, 0, 0, 0)]
         [InlineData("rgba(100, 0, 0, 0%)", 100, 0, 0, 0)]
         [InlineData("rgba(100, 120, 200, 0%)", 100, 120, 200, 0)]
-        [InlineData("rgba(100, 120, 200, 50%)", 100, 120, 200, 127)]
-        [InlineData("rgba(225, 225, 225, 100%)", 225, 225, 225, 255)]
-        public void ImportRGBAColourTest3(string t, int r, int g, int b, int a)
+        [InlineData("rgba(100, 120, 200, 50%)", 100, 120, 200, 0.5)]
+        [InlineData("rgba(225, 225, 225, 100%)", 225, 225, 225, 1)]
+        public void ImportRGBAColourTest3(string t, double r, double g, double b, double a)
         {
             var colour = Importer.GetRGBAColour(t, new Marker());
 
-            Assert.Equal(r, colour.R);
-            Assert.Equal(g, colour.G);
-            Assert.Equal(b, colour.B);
-            Assert.Equal(a, colour.A);
+            Assert.Equal(r, colour.R.Value);
+            Assert.Equal(g, colour.G.Value);
+            Assert.Equal(b, colour.B.Value);
+            Assert.Equal(a, colour.A.Value);
         }
 
         [Theory]
@@ -337,13 +337,13 @@ namespace Morph.Tests
         [InlineData("rgb(100, 0, 0)", 100, 0, 0)]
         [InlineData("rgb(100, 120, 200)", 100, 120, 200)]
         [InlineData("rgb(225, 225, 225)", 225, 225, 225)]
-        public void ImportRGBAColourTest4(string t, int r, int g, int b)
+        public void ImportRGBAColourTest4(string t, double r, double g, double b)
         {
             var colour = Importer.GetRGBAColour(t, new Marker());
 
-            Assert.Equal(r, colour.R);
-            Assert.Equal(g, colour.G);
-            Assert.Equal(b, colour.B);
+            Assert.Equal(r, colour.R.Value);
+            Assert.Equal(g, colour.G.Value);
+            Assert.Equal(b, colour.B.Value);
         }
 
         [Theory]

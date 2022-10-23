@@ -9,7 +9,7 @@ namespace Morph
     /// </summary>
     public class MRGBColour : MRGBAColour
     {
-        public MRGBColour(int r = 0, int g = 0, int b = 0) : base(r, g, b, 0) { }
+        public MRGBColour(IMNumeric r, IMNumeric g, IMNumeric b) : base(r, g, b, new MNumber("0")) { }
 
         public override string ToString()
         {
