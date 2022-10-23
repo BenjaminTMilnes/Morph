@@ -171,6 +171,27 @@ namespace Morph.Tests
         }
 
         [Theory]
+        [InlineData("123%", "123")]
+        [InlineData("123123123%", "123123123")]
+        [InlineData("123.%", "123.")]
+        [InlineData("123.0%", "123.0")]
+        [InlineData("123.000%", "123.000")]
+        [InlineData("123.123%", "123.123")]
+        [InlineData("1.123%", "1.123")]
+        [InlineData("0.123%", "0.123")]
+        [InlineData(".123%", ".123")]
+        [InlineData("000.123%", "000.123")]
+        [InlineData("000.123000%", "000.123000")]
+        [InlineData("12.3%", "12.3")]
+        public void ImportPercentageTest1(string t, string nt)
+        {
+            var percentage = Importer.GetPercentage(t, new Marker());
+
+            Assert.True(percentage is MPercentage);
+            Assert.Equal(double.Parse(nt) / 100.0, percentage.Value);
+        }
+
+        [Theory]
         [InlineData("123")]
         [InlineData("123abc")]
         [InlineData("abcdef")]
@@ -203,7 +224,7 @@ namespace Morph.Tests
         [InlineData("D4D4D4")]
         public void ImportHexadecimalNumberTest2(string n)
         {
-            var number = Importer.GetHexadecimalNumber( n, new Marker());
+            var number = Importer.GetHexadecimalNumber(n, new Marker());
 
             Assert.True(number == null);
         }
