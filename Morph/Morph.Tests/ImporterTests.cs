@@ -317,12 +317,24 @@ namespace Morph.Tests
         }
 
         [Theory]
+        [InlineData("#00")]
+        [InlineData("#000")]
+        [InlineData("#0000")]
+        [InlineData("#00000")]
+        [InlineData("#0000000")]
+        [InlineData("#000000000")]
+        public void ImportRGBAColourTest3(string t)
+        {
+            Assert.Throws<MorphSyntaxError>(() => Importer.GetRGBAColour(t, new Marker()));
+        }
+
+        [Theory]
         [InlineData("rgba(0, 0, 0, 0%)", 0, 0, 0, 0)]
         [InlineData("rgba(100, 0, 0, 0%)", 100, 0, 0, 0)]
         [InlineData("rgba(100, 120, 200, 0%)", 100, 120, 200, 0)]
         [InlineData("rgba(100, 120, 200, 50%)", 100, 120, 200, 0.5)]
         [InlineData("rgba(225, 225, 225, 100%)", 225, 225, 225, 1)]
-        public void ImportRGBAColourTest3(string t, double r, double g, double b, double a)
+        public void ImportRGBAColourTest4(string t, double r, double g, double b, double a)
         {
             var colour = Importer.GetRGBAColour(t, new Marker());
 
@@ -337,7 +349,7 @@ namespace Morph.Tests
         [InlineData("rgb(100, 0, 0)", 100, 0, 0)]
         [InlineData("rgb(100, 120, 200)", 100, 120, 200)]
         [InlineData("rgb(225, 225, 225)", 225, 225, 225)]
-        public void ImportRGBAColourTest4(string t, double r, double g, double b)
+        public void ImportRGBAColourTest5(string t, double r, double g, double b)
         {
             var colour = Importer.GetRGBAColour(t, new Marker());
 

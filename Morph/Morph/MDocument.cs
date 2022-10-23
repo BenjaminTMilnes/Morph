@@ -21,15 +21,27 @@ namespace Morph
         }
 
         /// <summary>
+        /// Imports a Morph document from a string.
+        /// </summary>
+        /// <param name="filePath"></param>
+        /// <returns></returns>
+        public static MDocument Import(string t)
+        {
+            var importer = new MImporter();
+
+            return importer.ImportDocument(t);
+        }
+
+        /// <summary>
         /// Imports a Morph document from a file.
         /// </summary>
         /// <param name="filePath"></param>
         /// <returns></returns>
-        public static MDocument Import(string filePath)
+        public static MDocument ImportFromFile(string filePath)
         {
-            var importer = new MImporter();
-
             var t = File.ReadAllText(filePath);
+
+            var importer = new MImporter();
 
             return importer.ImportDocument(t);
         }
@@ -47,7 +59,7 @@ namespace Morph
         /// Exports the Morph document to the given file path.
         /// </summary>
         /// <param name="filePath"></param>
-        public void Export(string filePath)
+        public void ExportToFile(string filePath)
         {
             var t = MExporter.ExportDocument(this);
 
