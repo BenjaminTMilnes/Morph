@@ -535,13 +535,21 @@ namespace Morph
 
                     marker.P = m.P;
 
-                    return new MRGBAColour(r, g, b, a);
+                    var colour = new MRGBAColour(r, g, b, a);
+
+                    colour.Form = RGBAColourForm.Hexadecimal;
+
+                    return colour;
                 }
                 else
                 {
                     marker.P = m.P;
 
-                    return new MRGBColour(r, g, b);
+                    var colour = new MRGBColour(r, g, b);
+
+                    colour.Form = RGBAColourForm.Hexadecimal;
+
+                    return colour;
                 }
             }
 
