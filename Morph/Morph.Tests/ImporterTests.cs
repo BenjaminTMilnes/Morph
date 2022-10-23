@@ -28,12 +28,12 @@ namespace Morph.Tests
         [InlineData(".123")]
         [InlineData("000.123")]
         [InlineData("000.123000")]
-        public void ImportNumberTest1(string n)
+        public void ImportNumberTest1(string t)
         {
-            var number = Importer.GetNumber(n, new Marker());
+            var number = Importer.GetNumber(t, new Marker());
 
             Assert.True(number is MNumber);
-            Assert.Equal(n, number.Value);
+            Assert.Equal(t, number.Value);
         }
 
         [Theory]
@@ -43,9 +43,9 @@ namespace Morph.Tests
         [InlineData("abc123")]
         [InlineData(" 123")]
         [InlineData("   123")]
-        public void ImportNumberTest2(string n)
+        public void ImportNumberTest2(string t)
         {
-            var number = Importer.GetNumber(n, new Marker());
+            var number = Importer.GetNumber(t, new Marker());
 
             Assert.True(number == null);
         }
@@ -57,9 +57,9 @@ namespace Morph.Tests
         [InlineData("...123")]
         [InlineData("123..")]
         [InlineData("123...")]
-        public void ImportNumberTest3(string n)
+        public void ImportNumberTest3(string t)
         {
-            Assert.Throws<MorphSyntaxError>(() => Importer.GetNumber(n, new Marker()));
+            Assert.Throws<MorphSyntaxError>(() => Importer.GetNumber(t, new Marker()));
         }
 
         [Theory]
