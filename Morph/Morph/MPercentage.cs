@@ -9,19 +9,27 @@ namespace Morph
     /// </summary>
     public class MPercentage
     {
+        public string Text { get; set; }
+
         /// <summary>
         /// The value of this percentage, represented as a double between 0.0 and 1.0.
         /// </summary>
-        public double Value { get; set; }
-
-        public MPercentage(double value = 0.0)
+        public double Value
         {
-            Value = value;
+            get
+            {
+                return double.Parse(Text) / 100.0;
+            }
+        }
+
+        public MPercentage(string text = "")
+        {
+            Text = text;
         }
 
         public override string ToString()
         {
-            return string.Format("{0}%", Value * 100);
+            return string.Format("{0}%", Text);
         }
     }
 }

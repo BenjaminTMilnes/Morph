@@ -33,7 +33,7 @@ namespace Morph.Tests
             var number = Importer.GetNumber(t, new Marker());
 
             Assert.True(number is MNumber);
-            Assert.Equal(t, number.Value);
+            Assert.Equal(t, number.Text);
         }
 
         [Theory]
@@ -53,7 +53,7 @@ namespace Morph.Tests
             var number = Importer.GetNumber(t, new Marker());
 
             Assert.True(number is MNumber);
-            Assert.Equal(nt, number.Value);
+            Assert.Equal(nt, number.Text);
         }
 
         [Theory]
@@ -110,8 +110,8 @@ namespace Morph.Tests
             var length = Importer.GetLength(t, new Marker());
 
             Assert.True(length is MLength);
-            Assert.Equal(nt, length.Number.Value);
-            Assert.Equal(lut, length.Unit.Value);
+            Assert.Equal(nt, length.Number.Text);
+            Assert.Equal(lut, length.Unit.Text);
         }
 
         [Theory]
@@ -131,8 +131,8 @@ namespace Morph.Tests
             var length = Importer.GetLength(t, new Marker());
 
             Assert.True(length is MLength);
-            Assert.Equal(nt, length.Number.Value);
-            Assert.Equal(lut, length.Unit.Value);
+            Assert.Equal(nt, length.Number.Text);
+            Assert.Equal(lut, length.Unit.Text);
         }
 
         [Theory]

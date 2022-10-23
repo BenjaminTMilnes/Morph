@@ -24,16 +24,16 @@ namespace Morph
     /// </summary>
     public class MLengthUnit
     {
-        public string Value { get; set; }
+        public string Text { get; set; }
 
-        public MLengthUnit(string value = "")
+        public MLengthUnit(string text = "")
         {
-            Value = value;
+            Text = text;
         }
 
         public override string ToString()
         {
-            return Value.Trim();
+            return Text.Trim();
         }
     }
 }

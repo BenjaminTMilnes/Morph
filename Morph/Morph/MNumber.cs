@@ -9,16 +9,24 @@ namespace Morph
     /// </summary>
     public class MNumber
     {
-        public string Value { get; set; }
+        public string Text { get; set; }
 
-        public MNumber(string value = "")
+        public double Value
         {
-            Value = value;
+            get
+            {
+                return double.Parse(Text);
+            }
+        }
+
+        public MNumber(string text = "")
+        {
+            Text = text;
         }
 
         public override string ToString()
         {
-            return Value.Trim();
+            return Text.Trim();
         }
     }
 }

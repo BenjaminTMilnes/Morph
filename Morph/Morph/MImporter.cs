@@ -468,7 +468,7 @@ namespace Morph
                 ValidateHSLAColourValue(l);
                 ValidateHSLAColourValue(a);
 
-                var hd = double.Parse((h as MNumber).Value);
+                var hd = (h as MNumber).Value;
                 var sd = GetSLAColourValue(s);
                 var ld = GetSLAColourValue(l);
                 var ad = GetSLAColourValue(a);
@@ -503,7 +503,7 @@ namespace Morph
                 ValidateHSLAColourValue(s);
                 ValidateHSLAColourValue(l);
 
-                var hd = double.Parse((h as MNumber).Value);
+                var hd = (h as MNumber).Value;
                 var sd = GetSLAColourValue(s);
                 var ld = GetSLAColourValue(l);
 
@@ -643,7 +643,7 @@ namespace Morph
             }
             else
             {
-                return double.Parse((n as MNumber).Value);
+                return double.Parse((n as MNumber).Text);
             }
         }
 
@@ -655,7 +655,7 @@ namespace Morph
             }
             else
             {
-                return int.Parse((n as MNumber).Value);
+                return int.Parse((n as MNumber).Text);
             }
         }
 
@@ -667,7 +667,7 @@ namespace Morph
         {
             if (value is MNumber)
             {
-                var v = double.Parse((value as MNumber).Value);
+                var v = double.Parse((value as MNumber).Text);
 
                 if (v < 0 || v > 1)
                 {
@@ -693,7 +693,7 @@ namespace Morph
         {
             if (value is MNumber)
             {
-                var v = int.Parse((value as MNumber).Value);
+                var v = int.Parse((value as MNumber).Text);
 
                 if (v < 0 || v > 255)
                 {
@@ -847,7 +847,7 @@ namespace Morph
 
             marker.P = m.P;
 
-            return new MPercentage(double.Parse(number.Value) / 100);
+            return new MPercentage(number.Text);
         }
 
         /// <summary>
