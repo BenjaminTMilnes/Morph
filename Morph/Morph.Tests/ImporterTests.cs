@@ -392,6 +392,11 @@ namespace Morph.Tests
         [InlineData("hsla(220, 100%, 100%, 0%)", 220, 1, 1, 0)]
         [InlineData("hsla(359, 100%, 100%, 0%)", 359, 1, 1, 0)]
         [InlineData("hsla(120, 50%, 50%, 50%)", 120, 0.5, 0.5, 0.5)]
+        [InlineData("hsla(0, 0, 0, 0)", 0, 0, 0, 0)]
+        [InlineData("hsla(60, 1, 1, 0)", 60, 1, 1, 0)]
+        [InlineData("hsla(220, 1, 1, 0)", 220, 1, 1, 0)]
+        [InlineData("hsla(359, 1, 1, 0)", 359, 1, 1, 0)]
+        [InlineData("hsla(120, 0.5, 0.5, 0.5)", 120, 0.5, 0.5, 0.5)]
         public void ImportHSLAColourTest1(string t, double h, double s, double l, double a)
         {
             var colour = Importer.GetHSLAColour(t, new Marker());
@@ -403,12 +408,30 @@ namespace Morph.Tests
         }
 
         [Theory]
+        [InlineData("hsla(0, 200%, 0%, 0%)")]
+        [InlineData("hsla(0, 0%, 200%, 0%)")]
+        [InlineData("hsla(0, 0%, 0%, 200%)")]
+        [InlineData("hsla(0, 200%, 200%, 200%)")]
+        [InlineData("hsla(0, 2, 0, 0)")]
+        [InlineData("hsla(0, 0, 2, 0)")]
+        [InlineData("hsla(0, 0, 0, 2)")]
+        [InlineData("hsla(0, 2, 2, 2)")]
+        [InlineData("hsla(0, 0%, 0%, 0%, 0%)")]
+        [InlineData("hsla(0, 0%, 0%)")]
+        [InlineData("hsla(0, 0%)")]
+        [InlineData("hsla(0)")]
+        public void ImportHSLAColourTest2(string t)
+        {
+            Assert.Throws<MorphSyntaxError>(() => Importer.GetHSLAColour(t, new Marker()));
+        }
+
+        [Theory]
         [InlineData("hsl(0, 0%, 0%)", 0, 0, 0)]
         [InlineData("hsl(60, 100%, 100%)", 60, 1, 1)]
         [InlineData("hsl(220, 100%, 100%)", 220, 1, 1)]
         [InlineData("hsl(359, 100%, 100%)", 359, 1, 1)]
         [InlineData("hsl(120, 50%, 50%)", 120, 0.5, 0.5)]
-        public void ImportHSLAColourTest2(string t, double h, double s, double l)
+        public void ImportHSLAColourTest3(string t, double h, double s, double l)
         {
             var colour = Importer.GetHSLAColour(t, new Marker());
 
