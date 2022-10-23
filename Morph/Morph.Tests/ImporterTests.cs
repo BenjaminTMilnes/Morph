@@ -77,6 +77,7 @@ namespace Morph.Tests
         [InlineData("...123")]
         [InlineData("123..")]
         [InlineData("123...")]
+        [InlineData("12.0.1")]
         public void ImportNumberTest4(string t)
         {
             Assert.Throws<MorphSyntaxError>(() => Importer.GetNumber(t, new Marker()));
@@ -189,6 +190,28 @@ namespace Morph.Tests
 
             Assert.True(percentage is MPercentage);
             Assert.Equal(double.Parse(nt) / 100.0, percentage.Value);
+        }
+
+        [Theory]
+        [InlineData("123 %")]
+        [InlineData("123123123 %")]
+        [InlineData("123. %")]
+        [InlineData("123.0 %")]
+        [InlineData("123.000 %")]
+        [InlineData("123.123 %")]
+        [InlineData("1.123 %")]
+        [InlineData("0.123 %")]
+        [InlineData(".123 %")]
+        [InlineData("000.123 %")]
+        [InlineData("000.123000 %")]
+        [InlineData("12.3 %")]
+        [InlineData("%")]
+        [InlineData("a%")]
+        public void ImportPercentageTest2(string t)
+        {
+            var percentage = Importer.GetPercentage(t, new Marker());
+
+            Assert.True(percentage == null);
         }
 
         [Theory]
