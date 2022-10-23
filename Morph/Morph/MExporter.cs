@@ -15,8 +15,8 @@ namespace Morph
         public static string ExportStyleRule(MStyleRule styleRule)
         {
             var ss = string.Join("", styleRule.Selectors);
-            var pp = ExportProperties(styleRule.Properties);
-            var t = string.Format("{0} {\n {1}}\n\n", ss, pp);
+            var ps = ExportProperties(styleRule.Properties);
+            var t = string.Format("{0} {\n {1}}\n\n", ss, ps);
 
             return t;
         }

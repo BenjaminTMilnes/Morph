@@ -12,7 +12,7 @@ namespace Morph
         {
             get
             {
-                return new string[] { "mm", "cm", "dm", "m", "pt", "in", "pc" };
+                return new string[] { "mm", "cm", "dm", "m", "pt", "in", "pw", "ph", "em", "en", "rem", "ren" };
             }
         }
 
