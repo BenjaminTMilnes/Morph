@@ -48,12 +48,12 @@ namespace Morph.Tests
         [InlineData(".123abc", ".123")]
         [InlineData("000.123abc", "000.123")]
         [InlineData("000.123000abc", "000.123000")]
-        public void ImportNumberTest2(string t1, string t2)
+        public void ImportNumberTest2(string t, string nt)
         {
-            var number = Importer.GetNumber(t1, new Marker());
+            var number = Importer.GetNumber(t, new Marker());
 
             Assert.True(number is MNumber);
-            Assert.Equal(t2, number.Value);
+            Assert.Equal(nt, number.Value);
         }
 
         [Theory]
@@ -104,6 +104,8 @@ namespace Morph.Tests
 
         [Theory]
         [InlineData("123mm123mm", "123", "mm")]
+        [InlineData("123mmmm", "123", "mm")]
+        [InlineData("123mmabc", "123", "mm")]
         [InlineData("123123cm123mm", "123123", "cm")]
         [InlineData("123.dm123mm", "123.", "dm")]
         [InlineData("123.0m123mm", "123.0", "m")]
@@ -154,6 +156,12 @@ namespace Morph.Tests
         [InlineData("2cm", 1)]
         [InlineData("2cm 2cm", 2)]
         [InlineData("2cm 2cm 2cm 2cm", 4)]
+        [InlineData("2cm 2cm 2", 2)]
+        [InlineData("2cm 2cm cm", 2)]
+        [InlineData("2cm 2cm abc", 2)]
+        [InlineData("2cm 2cm, 2cm", 2)]
+        [InlineData("2cm 2cm, 2cm 2cm", 2)]
+        [InlineData("2cm, 2cm, 2cm, 2cm", 1)]
         public void ImportLengthSetTest1(string ls, int n)
         {
             var lengthSet = Importer.GetLengthSet(ls, new Marker());
