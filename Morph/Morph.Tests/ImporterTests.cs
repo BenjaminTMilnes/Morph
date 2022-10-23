@@ -83,21 +83,37 @@ namespace Morph.Tests
         }
 
         [Theory]
-        [InlineData("123mm")]
-        [InlineData("123123cm")]
-        [InlineData("123.dm")]
-        [InlineData("123.0m")]
-        [InlineData("123.000in")]
-        [InlineData("123.123pt")]
-        [InlineData("1.123pc")]
-        [InlineData("0.123 mm")]
-        [InlineData(".123   cm")]
-        [InlineData("000.123      dm")]
-        public void ImportLengthTest1(string l)
+        [InlineData("123mm", "123", "mm")]
+        [InlineData("123123cm", "123123", "cm")]
+        [InlineData("123.dm", "123.", "dm")]
+        [InlineData("123.0m", "123.0", "m")]
+        [InlineData("123.000in", "123.000", "in")]
+        [InlineData("123.123pt", "123.123", "pt")]
+        [InlineData("1.123pc", "1.123", "pc")]
+        [InlineData("0.123 mm", "0.123", "mm")]
+        [InlineData(".123   cm", ".123", "cm")]
+        [InlineData("000.123      dm", "000.123", "dm")]
+        public void ImportLengthTest1(string t, string nt, string lut)
         {
-            var length = Importer.GetLength(l, new Marker());
+            var length = Importer.GetLength(t, new Marker());
 
             Assert.True(length is MLength);
+            Assert.Equal(nt, length.Number.Value);
+            Assert.Equal(lut, length.Unit.Value);
+        }
+
+        [Theory]
+        [InlineData("123km")]
+        [InlineData("123nm")]
+        [InlineData("123abc")]
+        [InlineData("mm")]
+        [InlineData("km")]
+        [InlineData("abc")]
+        public void ImportLengthTest2(string t)
+        {
+            var length = Importer.GetLength(t, new Marker());
+
+            Assert.True(length == null);
         }
 
         [Theory]
