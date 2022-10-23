@@ -190,6 +190,43 @@ namespace Morph.Tests
         }
 
         [Theory]
+        [InlineData("123")]
+        [InlineData("123abc")]
+        [InlineData("abcdef")]
+        [InlineData("ffffff")]
+        [InlineData("f0f0f0")]
+        [InlineData("d4d4d4")]
+        [InlineData("123ABC")]
+        [InlineData("ABCDEF")]
+        [InlineData("FFFFFF")]
+        [InlineData("F0F0F0")]
+        [InlineData("D4D4D4")]
+        public void ImportHexadecimalNumberTest2(string n)
+        {
+            var number = Importer.GetHexadecimalNumber( n, new Marker());
+
+            Assert.True(number == null);
+        }
+
+        [Theory]
+        [InlineData("ghi")]
+        [InlineData("GHI")]
+        [InlineData("gggggg")]
+        [InlineData("g0g0g0")]
+        [InlineData("GGGGGG")]
+        [InlineData("G0G0G0")]
+        [InlineData(".123")]
+        [InlineData(" 123123")]
+        [InlineData(" FFFFFF")]
+        [InlineData("-FFFFFF")]
+        public void ImportHexadecimalNumberTest3(string n)
+        {
+            var number = Importer.GetHexadecimalNumber("#" + n, new Marker());
+
+            Assert.True(number == null);
+        }
+
+        [Theory]
         [InlineData("#00000000", 0, 0, 0, 0)]
         [InlineData("#04050607", 4, 5, 6, 7)]
         [InlineData("#10101010", 16, 16, 16, 16)]
