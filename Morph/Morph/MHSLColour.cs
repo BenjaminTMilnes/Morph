@@ -13,7 +13,7 @@ namespace Morph
 
         public override string ToString()
         {
-            return string.Format("hsla({0}, {1:F3}, {2:F3})", H, S, L);
+            return string.Format("hsl({0}, {1:F3}, {2:F3})", H, S, L);
         }
     }
 }

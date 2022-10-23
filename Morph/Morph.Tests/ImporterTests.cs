@@ -370,8 +370,8 @@ namespace Morph.Tests
         [InlineData("page-margin: 2cm 2cm 2cm 2cm;", "page-margin", "2cm 2cm 2cm 2cm")]
         [InlineData("font-name: 'Open Sans', sans-serif;", "font-name", "'Open Sans', sans-serif")]
         [InlineData("font-colour: hsl(350, 60%, 60%);", "font-colour", "hsl(350, 60%, 60%)")]
-        [InlineData("font-colour: #dd0000;", "font-colour", "#dd0000")]
-        [InlineData("font-colour: #dd000088;", "font-colour", "#dd000088")]
+        [InlineData("font-colour: #dd0000;", "font-colour", "#DD0000")]
+        [InlineData("font-colour: #dd000088;", "font-colour", "#DD000088")]
         [InlineData("font-colour: black;", "font-colour", "black")]
         public void ImportPropertyTest1(string text, string name, string value)
         {

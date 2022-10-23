@@ -132,20 +132,16 @@ namespace Morph
         {
             var m = marker.Copy();
 
-            var c = inputText.Substring(m.P, 1)[0];
-
-            if (c != '#')
+            if (Expect(inputText, m, "#") == false)
             {
                 return null;
             }
-
-            m.P++;
 
             var start = m.P;
 
             while (m.P < inputText.Length)
             {
-                c = inputText.Substring(m.P, 1)[0];
+                var c = inputText.Substring(m.P, 1)[0];
 
                 if (IsAlphanumeric(c) || c == '-' || c == '_')
                 {
@@ -175,20 +171,16 @@ namespace Morph
         {
             var m = marker.Copy();
 
-            var c = inputText.Substring(m.P, 1)[0];
-
-            if (c != '.')
+            if (Expect(inputText, m, ".") == false)
             {
                 return null;
             }
-
-            m.P++;
 
             var start = m.P;
 
             while (m.P < inputText.Length)
             {
-                c = inputText.Substring(m.P, 1)[0];
+                var c = inputText.Substring(m.P, 1)[0];
 
                 if (IsAlphanumeric(c) || c == '-' || c == '_')
                 {
@@ -260,19 +252,10 @@ namespace Morph
 
             GetWhiteSpace(inputText, m);
 
-            if (m.P >= inputText.Length)
+            if (Expect(inputText, m, "{") == false)
             {
                 return null;
             }
-
-            var c = inputText.Substring(m.P, 1)[0];
-
-            if (c != '{')
-            {
-                return null;
-            }
-
-            m.P++;
 
             var properties = new List<MProperty>();
 
@@ -292,19 +275,10 @@ namespace Morph
 
             GetWhiteSpace(inputText, m);
 
-            if (m.P >= inputText.Length)
+            if (Expect(inputText, m, "}") == false)
             {
                 return null;
             }
-
-            c = inputText.Substring(m.P, 1)[0];
-
-            if (c != '}')
-            {
-                return null;
-            }
-
-            m.P++;
 
             marker.P = m.P;
 
@@ -332,19 +306,12 @@ namespace Morph
 
             GetWhiteSpace(inputText, m);
 
-            if (m.P >= inputText.Length)
+            if (Expect(inputText, m, ":") == false)
             {
                 return null;
             }
 
-            var c = inputText.Substring(m.P, 1)[0];
-
-            if (c != ':')
-            {
-                return null;
-            }
-
-            m.P++;
+            GetWhiteSpace(inputText, m);
 
             var value = GetPropertyValue(inputText, m);
 
@@ -353,19 +320,12 @@ namespace Morph
                 return null;
             }
 
-            if (m.P >= inputText.Length)
+            GetWhiteSpace(inputText, m);
+
+            if (Expect(inputText, m, ";") == false)
             {
                 return null;
             }
-
-            c = inputText.Substring(m.P, 1)[0];
-
-            if (c != ';')
-            {
-                return null;
-            }
-
-            m.P++;
 
             marker.P = m.P;
 
@@ -513,6 +473,8 @@ namespace Morph
                 var ld = GetSLAColourValue(l);
                 var ad = GetSLAColourValue(a);
 
+                marker.P = m.P;
+
                 return new MHSLAColour(hd, sd, ld, ad);
             }
 
@@ -544,6 +506,8 @@ namespace Morph
                 var hd = double.Parse((h as MNumber).Value);
                 var sd = GetSLAColourValue(s);
                 var ld = GetSLAColourValue(l);
+
+                marker.P = m.P;
 
                 return new MHSLColour(hd, sd, ld);
             }
@@ -578,10 +542,14 @@ namespace Morph
                 {
                     var a = Convert.ToInt32(hn.Substring(6, 2), 16);
 
+                    marker.P = m.P;
+
                     return new MRGBAColour(r, g, b, a);
                 }
                 else
                 {
+                    marker.P = m.P;
+
                     return new MRGBColour(r, g, b);
                 }
             }
@@ -624,6 +592,8 @@ namespace Morph
                 var bi = GetRGBAColourValueAsInteger(b);
                 var ai = GetRGBAColourValueAsInteger(a);
 
+                marker.P = m.P;
+
                 return new MRGBAColour(ri, gi, bi, ai);
             }
 
@@ -656,6 +626,8 @@ namespace Morph
                 var ri = GetRGBAColourValueAsInteger(r);
                 var gi = GetRGBAColourValueAsInteger(g);
                 var bi = GetRGBAColourValueAsInteger(b);
+
+                marker.P = m.P;
 
                 return new MRGBColour(ri, gi, bi);
             }
@@ -749,25 +721,16 @@ namespace Morph
         {
             var m = marker.Copy();
 
-            if (m.P >= inputText.Length)
+            if (Expect(inputText, m, "#") == false)
             {
                 return null;
             }
-
-            var c = inputText.Substring(m.P, 1)[0];
-
-            if (c != '#')
-            {
-                return null;
-            }
-
-            m.P++;
 
             var start = m.P;
 
             while (m.P < inputText.Length)
             {
-                c = inputText.Substring(m.P, 1)[0];
+                var c = inputText.Substring(m.P, 1)[0];
 
                 if (IsHexadecimal(c))
                 {
@@ -803,19 +766,10 @@ namespace Morph
         {
             var m = marker.Copy();
 
-            if (m.P >= inputText.Length)
+            if (Expect(inputText, m, "(") == false)
             {
                 return null;
             }
-
-            var c = inputText.Substring(m.P, 1);
-
-            if (c != "(")
-            {
-                return null;
-            }
-
-            m.P++;
 
             var numbers = new List<object>();
 
@@ -846,7 +800,7 @@ namespace Morph
                     break;
                 }
 
-                c = inputText.Substring(m.P, 1);
+                var c = inputText.Substring(m.P, 1);
 
                 if (c == ",")
                 {
@@ -863,6 +817,8 @@ namespace Morph
                     throw new MorphSyntaxError("Expected a comma or a closing bracket.");
                 }
             }
+
+            marker.P = m.P;
 
             return numbers;
         }
