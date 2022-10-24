@@ -397,6 +397,13 @@ namespace Morph
                 return hslaColour;
             }
 
+            var cmykColour = GetCMYKColour(inputText, marker);
+
+            if (cmykColour != null)
+            {
+                return cmykColour;
+            }
+
             var start = marker.P;
 
             while (marker.P < inputText.Length)
@@ -424,6 +431,57 @@ namespace Morph
             t = t.Trim();
 
             return t;
+        }
+
+        /// <summary>
+        /// Gets a CMYK colour at the current position and returns it.
+        /// </summary>
+        /// <param name="inputText"></param>
+        /// <param name="marker"></param>
+        /// <returns></returns>
+        public MCMYKColour GetCMYKColour(string inputText, Marker marker)
+        {
+            var m = marker.Copy();
+
+            if (m.P > inputText.Length - 4)
+            {
+                return null;
+            }
+
+            var c = inputText.Substring(m.P, 4);
+
+            if (c == "cmyk")
+            {
+                m.P += 4;
+
+                var ns = GetNumberSet(inputText, m);
+
+                if (ns == null)
+                {
+                    return null;
+                }
+
+                if (ns.Count != 4)
+                {
+                    throw new MorphSyntaxError("A CMYK colour must have four values.");
+                }
+
+                var _c = ns[0];
+                var _m = ns[1];
+                var _y = ns[2];
+                var _k = ns[3];
+
+                ValidateCMYKColourValue(_c);
+                ValidateCMYKColourValue(_m);
+                ValidateCMYKColourValue(_y);
+                ValidateCMYKColourValue(_k);
+
+                marker.P = m.P;
+
+                return new MCMYKColour(_c, _m, _y, _k);
+            }
+
+            return null;
         }
 
         /// <summary>
@@ -625,27 +683,29 @@ namespace Morph
             return null;
         }
 
-        public double GetSLAColourValue(object n)
+        /// <summary>
+        /// Checks that a number is valid as a CMYK colour value.
+        /// </summary>
+        /// <param name="value"></param>
+        public void ValidateCMYKColourValue(object value)
         {
-            if (n is MPercentage)
+            if (value is MNumber)
             {
-                return (n as MPercentage).Value;
-            }
-            else
-            {
-                return double.Parse((n as MNumber).Text);
-            }
-        }
+                var v = (value as MNumber).Value;
 
-        public int GetRGBAColourValueAsInteger(object n)
-        {
-            if (n is MPercentage)
-            {
-                return (int)((n as MPercentage).Value * 255);
+                if (v < 0 || v > 1)
+                {
+                    throw new MorphSyntaxError("CMYK colour values must be between 0 and 1.");
+                }
             }
-            else
+            if (value is MPercentage)
             {
-                return int.Parse((n as MNumber).Text);
+                var v = (value as MPercentage).Value * 100;
+
+                if (v < 0 || v > 100)
+                {
+                    throw new MorphSyntaxError("CMYK colour values must be between 0% and 100%.");
+                }
             }
         }
 
@@ -657,7 +717,7 @@ namespace Morph
         {
             if (value is MNumber)
             {
-                var v = double.Parse((value as MNumber).Text);
+                var v = (value as MNumber).Value;
 
                 if (v < 0 || v > 1)
                 {
@@ -683,7 +743,7 @@ namespace Morph
         {
             if (value is MNumber)
             {
-                var v = int.Parse((value as MNumber).Text);
+                var v = (value as MNumber).Value;
 
                 if (v < 0 || v > 255)
                 {
