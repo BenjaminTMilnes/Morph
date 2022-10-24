@@ -431,6 +431,11 @@ namespace Morph.Tests
         [InlineData("hsl(220, 100%, 100%)", 220, 1, 1)]
         [InlineData("hsl(359, 100%, 100%)", 359, 1, 1)]
         [InlineData("hsl(120, 50%, 50%)", 120, 0.5, 0.5)]
+        [InlineData("hsl(0, 0, 0)", 0, 0, 0)]
+        [InlineData("hsl(60, 1, 1)", 60, 1, 1)]
+        [InlineData("hsl(220, 1, 1)", 220, 1, 1)]
+        [InlineData("hsl(359, 1, 1)", 359, 1, 1)]
+        [InlineData("hsl(120, 0.5, 0.5)", 120, 0.5, 0.5)]
         public void ImportHSLAColourTest3(string t, double h, double s, double l)
         {
             var colour = Importer.GetHSLAColour(t, new Marker());
@@ -441,10 +446,31 @@ namespace Morph.Tests
         }
 
         [Theory]
+        [InlineData("hsl(0, 200%, 0%)")]
+        [InlineData("hsl(0, 0%, 200%)")]
+        [InlineData("hsl(0, 200%, 200%)")]
+        [InlineData("hsl(0, 2, 0)")]
+        [InlineData("hsl(0, 0, 2)")]
+        [InlineData("hsl(0, 2, 2)")]
+        [InlineData("hsl(0, 0%, 0%, 0%, 0%)")]
+        [InlineData("hsl(0, 0%, 0%, 0%)")]
+        [InlineData("hsl(0, 0%)")]
+        [InlineData("hsl(0)")]
+        public void ImportHSLAColourTest4(string t)
+        {
+            Assert.Throws<MorphSyntaxError>(() => Importer.GetHSLAColour(t, new Marker()));
+        }
+
+        [Theory]
         [InlineData("page-size: a4;", "page-size", "a4")]
+        [InlineData("page-margin: 1in;", "page-margin", "1in")]
+        [InlineData("page-margin: 2cm 1.5cm;", "page-margin", "2cm 1.5cm")]
         [InlineData("page-margin: 2cm 2cm 2cm 2cm;", "page-margin", "2cm 2cm 2cm 2cm")]
         [InlineData("font-name: 'Open Sans', sans-serif;", "font-name", "'Open Sans', sans-serif")]
         [InlineData("font-colour: hsl(350, 60%, 60%);", "font-colour", "hsl(350, 60%, 60%)")]
+        [InlineData("font-colour: hsla(350, 60%, 60%, 0%);", "font-colour", "hsla(350, 60%, 60%, 0%)")]
+        [InlineData("font-colour: rgb(0, 0, 64);", "font-colour", "rgb(0, 0, 64)")]
+        [InlineData("font-colour: rgba(0, 0, 64, 0);", "font-colour", "rgba(0, 0, 64, 0)")]
         [InlineData("font-colour: #dd0000;", "font-colour", "#DD0000")]
         [InlineData("font-colour: #dd000088;", "font-colour", "#DD000088")]
         [InlineData("font-colour: black;", "font-colour", "black")]
