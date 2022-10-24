@@ -462,6 +462,39 @@ namespace Morph.Tests
         }
 
         [Theory]
+        [InlineData("cmyk(0%, 0%, 0%, 0%)", 0, 0, 0, 0)]
+        [InlineData("cmyk(50%, 60%, 70%, 80%)", 0.5, 0.6, 0.7, 0.8)]
+        [InlineData("cmyk(0, 0, 0, 0)", 0, 0, 0, 0)]
+        [InlineData("cmyk(0.5, 0.6, 0.7, 0.8)", 0.5, 0.6, 0.7, 0.8)]
+        public void ImportCMYKColourTest1(string t, double c, double m, double y, double k)
+        {
+            var colour = Importer.GetCMYKColour(t, new Marker());
+
+            Assert.Equal(c, colour.C.Value);
+            Assert.Equal(m, colour.M.Value);
+            Assert.Equal(y, colour.Y.Value);
+            Assert.Equal(k, colour.K.Value);
+        }
+
+        [Theory]
+        [InlineData("cmyk(0, 200%, 0%, 0%)")]
+        [InlineData("cmyk(0, 0%, 200%, 0%)")]
+        [InlineData("cmyk(0, 0%, 0%, 200%)")]
+        [InlineData("cmyk(0, 200%, 200%, 200%)")]
+        [InlineData("cmyk(0, 2, 0, 0)")]
+        [InlineData("cmyk(0, 0, 2, 0)")]
+        [InlineData("cmyk(0, 0, 0, 2)")]
+        [InlineData("cmyk(0, 2, 2, 2)")]
+        [InlineData("cmyk(0, 0%, 0%, 0%, 0%)")]
+        [InlineData("cmyk(0, 0%, 0%)")]
+        [InlineData("cmyk(0, 0%)")]
+        [InlineData("cmyk(0)")]
+        public void ImportCMYKColourTest2(string t)
+        {
+            Assert.Throws<MorphSyntaxError>(() => Importer.GetCMYKColour(t, new Marker()));
+        }
+
+        [Theory]
         [InlineData("page-size: a4;", "page-size", "a4")]
         [InlineData("page-margin: 1in;", "page-margin", "1in")]
         [InlineData("page-margin: 2cm 1.5cm;", "page-margin", "2cm 1.5cm")]
